@@ -1,18 +1,23 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function App() {
-  const [message, setMessage] = useState('');
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/')
-      .then(res => res.text())
-      .then(data => setMessage(data));
+    fetch(`${process.env.REACT_APP_API_URL}/users`)
+      .then(res => res.json())
+      .then(data => setUsers(data))
+      .catch(console.error);
   }, []);
 
   return (
     <div>
-      <h1>Frontend</h1>
-      <p>Backend says: {message}</p>
+      <h1>User List</h1>
+      <ul>
+        {users.map(u => (
+          <li key={u.id}>{u.name}</li>
+        ))}
+      </ul>
     </div>
   );
 }
